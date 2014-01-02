@@ -15,11 +15,6 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
   1. 簡単な認証。めんどうなWeb認証と端末認証をシームレスに実現。
   1. ガラポンTV APIにほぼ完全対応。
 
-
-## 関連リンク
-* http://garapon.tv/developer
-
-
 ## version 0.1 最初のリリース
 [ダウンロードはこちら](https://github.com/NoriakiHoriuchi/Garapon4J/releases)
 
@@ -40,3 +35,6 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
   * お気に入り追加結果を生Jsonから `boolean` または独自オブジェクトに変更
 1. 余裕あれば
   * 録画チャンネル取得結果を生Jsonから 独自オブジェクトに変更
+  
+## 関連リンク
+* http://garapon.tv/developer
