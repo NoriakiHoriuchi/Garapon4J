@@ -14,6 +14,8 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
     * Jackson
   1. 簡単な認証。めんどうなWeb認証と端末認証をシームレスに実現。
   1. ガラポンTV APIにほぼ完全対応。
+
+
 ## 関連リンク
 * http://garapon.tv/developer
 
