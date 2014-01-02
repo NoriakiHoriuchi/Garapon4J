@@ -12,13 +12,13 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
     * HTTP Components HttpCore
     * HTTP Components HttpClient
     * Jackson
-  1. 簡単な認証。
+  1. 簡単な認証。めんどうなWeb認証と端末認証をシームレスに実現。
   1. ガラポンTV APIにほぼ完全対応。
 ## 関連リンク
 * http://garapon.tv/developer
 
 
-# version 0.1 最初のリリース
+## version 0.1 最初のリリース
 [ダウンロードはこちら](https://github.com/NoriakiHoriuchi/Garapon4J/releases)
 
 ## できること
