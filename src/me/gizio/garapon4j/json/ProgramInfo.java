@@ -23,7 +23,7 @@ public class ProgramInfo {
 	private int caption_hit;
 	private CaptionInfo caption;
 
-	GaraponSettings settings;
+	private GaraponSettings settings;
 
 	public ProgramInfo() {
 
@@ -32,7 +32,7 @@ public class ProgramInfo {
 	public ProgramInfo(String gtvid, DateTime startdate, Duration duration,
 			int ch, String title, String description, int favorite,
 			ArrayList<String> genre, String bc, String bc_tags, int ts,
-			int caption_hit, CaptionInfo caption, GaraponSettings settings) {
+			int caption_hit, CaptionInfo caption) {
 		super();
 		this.gtvid = gtvid;
 		this.startdate = startdate;
@@ -47,7 +47,6 @@ public class ProgramInfo {
 		this.ts = ts;
 		this.caption_hit = caption_hit;
 		this.caption = caption;
-		this.settings = settings;
 	}
 
 	public String getGtvid() {
@@ -137,7 +136,7 @@ public class ProgramInfo {
 		this.favorite = favorite;
 	}
 
-	public void setGenres(ArrayList<String> genre) {
+	public void setGenre(ArrayList<String> genre) {
 		this.genre = genre;
 	}
 
@@ -159,10 +158,6 @@ public class ProgramInfo {
 
 	public void setCaption(CaptionInfo caption) {
 		this.caption = caption;
-	}
-
-	public void setSettings(GaraponSettings settings) {
-		this.settings = settings;
 	}
 
 	public String getThumbUrl() {

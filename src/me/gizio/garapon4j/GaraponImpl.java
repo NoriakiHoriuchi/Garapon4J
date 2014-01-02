@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class GaraponImpl implements Garapon {
 
 	public GaraponSettings settings;
-	public ObjectMapper mapper;
+	public static ObjectMapper mapper;
 	private static GaraponImpl instance = new GaraponImpl();
 
 	private GaraponImpl() {
@@ -262,26 +262,75 @@ public class GaraponImpl implements Garapon {
 			return new SearchBuilder();
 		}
 
+		// XXX 動作確認済
+		/**
+		 * 1ページあたりの結果取得数を指定します。デフォルトは20。最大で100。
+		 * 
+		 * @param n
+		 * @return
+		 */
 		public SearchBuilder setN(String n) {
 			params.add(new BasicNameValuePair("n", n));
 			return this;
 		}
 
+		// XXX 動作確認済
+		/**
+		 * 検索結果のページ番号を指定します。デフォルトは1。
+		 * 
+		 * @param p
+		 * @return
+		 */
 		public SearchBuilder setP(String p) {
 			params.add(new BasicNameValuePair("p", p));
 			return this;
 		}
 
+		// XXX 動作確認済
+		/**
+		 * 
+		 * @param s
+		 *            "e"（EPG）または"c"（字幕）
+		 * @return
+		 */
 		public SearchBuilder setS(String s) {
 			params.add(new BasicNameValuePair("s", s));
 			return this;
 		}
 
+		/*
+		 * FIXME 症状：文字列検索ができない 全角文字が2文字以上だとヒットしない
+		 */
+		/**
+		 * 文字列で検索します。
+		 * 
+		 * @param key
+		 *            String
+		 * @return
+		 */
 		public SearchBuilder setKey(String key) {
 			params.add(new BasicNameValuePair("key", key));
 			return this;
 		}
 
+		// XXX 動作確認済
+		/**
+		 * GTV IDを直接指定して検索します。
+		 * 
+		 * @param gtvid
+		 * @return
+		 */
+		public SearchBuilder setGtvid(String gtvid) {
+			params.add(new BasicNameValuePair("gtvid", gtvid));
+			return this;
+		}
+
+		/**
+		 * GTV IDを直接指定して検索します。
+		 * 
+		 * @param gtvid
+		 * @return
+		 */
 		public SearchBuilder setGtvid(ArrayList<String> gtvid) {
 			// FIXME
 			if (gtvid.size() == 1) {
@@ -299,48 +348,56 @@ public class GaraponImpl implements Garapon {
 			return this;
 		}
 
-		public SearchBuilder setGtvid(String gtvid) {
-			params.add(new BasicNameValuePair("gtvid", gtvid));
-			return this;
-		}
-
+		// FIXME ProgramInfoでparseに失敗する
 		public SearchBuilder setGenre0(String genre0) {
 			params.add(new BasicNameValuePair("genre0", genre0));
 			return this;
 		}
 
+		// FIXME ProgramInfoでparseに失敗する
 		public SearchBuilder setGenre1(String genre1) {
 			params.add(new BasicNameValuePair("genre1", genre1));
 			return this;
 		}
 
+		// XXX 動作確認済
 		public SearchBuilder setCh(String ch) {
 			params.add(new BasicNameValuePair("ch", ch));
 			return this;
 		}
 
+		// XXX 動作確認済
+		/**
+		 * sdateとedateで設定した範囲が「番組開始時間の範囲」なのか「番組終了時間の範囲」なのかを設定します。
+		 * @param dt 番組開始時間の範囲：s、番組終了時間の範囲：e
+		 * @return
+		 */
 		public SearchBuilder setDt(String dt) {
 			params.add(new BasicNameValuePair("dt", dt));
 			return this;
 		}
 
+		// XXX 動作確認済
 		public SearchBuilder setSdate(DateTime sdate) {
 			params.add(new BasicNameValuePair("sdate", sdate
-					.toString("yyyy-MM-DD hh:mm:ss")));
+					.toString("yyyy-MM-dd hh:mm:ss")));
 			return this;
 		}
 
+		// XXX 動作確認済
 		public SearchBuilder setEdate(DateTime edate) {
 			params.add(new BasicNameValuePair("edate", edate
-					.toString("yyyy-MM-DD hh:mm:ss")));
+					.toString("yyyy-MM-dd hh:mm:ss")));
 			return this;
 		}
 
+		// XXX 動作確認済
 		public SearchBuilder setRank(String rank) {
 			params.add(new BasicNameValuePair("rank", rank));
 			return this;
 		}
 
+		// XXX 動作確認済
 		public SearchBuilder setSort(String sort) {
 			params.add(new BasicNameValuePair("sort", sort));
 			return this;
@@ -366,12 +423,17 @@ public class GaraponImpl implements Garapon {
 			} else {
 				// success
 				try {
-					HttpPost httpPost = new HttpPost("http://"
-							+ settings.getIpAddress() + ":"
+					String url = "http://" + settings.getIpAddress() + ":"
 							+ settings.getPort() + "/gapi/v3"
 							+ "/search?dev_id=" + settings.getDevId()
-							+ "&gtvsession=" + settings.getGtvSessionId());
+							+ "&gtvsession=" + settings.getGtvSessionId();
+					HttpPost httpPost = new HttpPost(url);
 					try {
+						for (NameValuePair p : params) {
+							System.out
+									.println(p.getName() + "=" + p.getValue());
+						}
+
 						httpPost.setEntity(new UrlEncodedFormEntity(params));
 						CloseableHttpResponse response = httpclient
 								.execute(httpPost);
@@ -398,7 +460,9 @@ public class GaraponImpl implements Garapon {
 				}
 			}
 
-			ObjectMapper mapper = GaraponImpl.getInstance().mapper;
+			if (GaraponImpl.getInstance().mapper == null) {
+				mapper = new ObjectMapper();
+			}
 			try {
 				search = mapper.readValue(resultJsonString.getBytes(),
 						SearchResult.class);
