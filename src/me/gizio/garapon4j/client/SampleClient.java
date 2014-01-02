@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import me.gizio.garapon4j.Garapon;
+import me.gizio.garapon4j.GaraponImpl;
 import me.gizio.garapon4j.json.ProgramInfo;
 import me.gizio.garapon4j.other.GaraponSettings;
 
 public class SampleClient {
-	static Garapon garapon;
+	static GaraponImpl garapon;
 	static GaraponSettings settings;
 
 	public static void main(String[] args) {
 		System.out.println("============ before ============");
-		garapon = Garapon.getInstance();
+		garapon = GaraponImpl.getInstance();
 		settings = GaraponSettings.getInstance();
 		print();
 		System.out.println("============ before ============");
