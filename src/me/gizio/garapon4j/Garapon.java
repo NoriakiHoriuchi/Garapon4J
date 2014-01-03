@@ -27,7 +27,7 @@ public interface Garapon {
 
 	public SearchBuilder getSearchBuilder();
 	
-	public String favorite(String gtvid, String rank);
+	public boolean favorite(String gtvid, String rank);
 
 	public String channel();
 
