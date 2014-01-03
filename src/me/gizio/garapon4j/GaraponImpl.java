@@ -94,7 +94,7 @@ public class GaraponImpl implements Garapon {
 		return result;
 	}
 
-	private String post(String url, List<NameValuePair> params) {
+	private static String post(String url, List<NameValuePair> params) {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		if (params != null) {
@@ -254,7 +254,7 @@ public class GaraponImpl implements Garapon {
 				+ "/gapi/v3";
 	}
 
-	private void getObjectMapper() {
+	private static void getObjectMapper() {
 		if (mapper == null) {
 			mapper = new ObjectMapper();
 		}
@@ -417,14 +417,10 @@ public class GaraponImpl implements Garapon {
 		}
 
 		public ArrayList<ProgramInfo> execute() {
-			SearchResult search = null;
-			ArrayList<ProgramInfo> result = null;
+			SearchResult search = new SearchResult();
+			ArrayList<ProgramInfo> result = new ArrayList<ProgramInfo>();
 
 			GaraponSettings settings = GaraponSettings.getInstance();
-			CloseableHttpClient httpclient = HttpClients.createDefault();
-
-			String resultJsonString = null;
-
 			String devId = settings.getDevId();
 			if (devId == null) {
 				// fail
@@ -434,45 +430,16 @@ public class GaraponImpl implements Garapon {
 						+ settings.getPort() + "/gapi/v3" + "/search?dev_id="
 						+ settings.getDevId() + "&gtvsession="
 						+ settings.getGtvSessionId();
-				HttpPost httpPost = new HttpPost(url);
+				String body = post(url, params);
+				getObjectMapper();
 				try {
-					httpPost.setEntity(new UrlEncodedFormEntity(params));
-					CloseableHttpResponse response = null;
-					try {
-						response = httpclient.execute(httpPost);
-						ResponseHandler<String> handler = new BasicResponseHandler();
-						String body = handler.handleResponse(response);
-						resultJsonString = body;
-					} catch (ClientProtocolException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} finally {
-						try {
-							response.close();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				} catch (UnsupportedEncodingException e1) {
+					search = mapper.readValue(body.getBytes(),
+							SearchResult.class);
+					result = search.getProgram();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e.printStackTrace();
 				}
-			}
-
-			if (mapper == null) {
-				mapper = new ObjectMapper();
-			}
-			try {
-				search = mapper.readValue(resultJsonString.getBytes(),
-						SearchResult.class);
-				result = search.getProgram();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			return result;
 		}
