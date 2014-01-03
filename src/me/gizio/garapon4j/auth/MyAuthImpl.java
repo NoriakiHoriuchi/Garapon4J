@@ -60,7 +60,6 @@ public class MyAuthImpl implements MyAuth {
 
 	@Override
 	public boolean executeWebAuth() throws GaraponException {
-		System.out.println("------------ executingWebAuth -----------");
 		settings = GaraponSettings.getInstance();
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 

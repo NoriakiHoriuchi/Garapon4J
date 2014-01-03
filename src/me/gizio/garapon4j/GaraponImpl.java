@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import me.gizio.garapon4j.auth.MyAuthImpl;
 import me.gizio.garapon4j.json.ProgramInfo;
@@ -59,11 +60,112 @@ public class GaraponImpl implements Garapon {
 		return null;
 	}
 
-	public ArrayList<ProgramInfo> search(String json) {
+	public ArrayList<ProgramInfo> search() {
+		return search(null);
+	}
+
+	public ArrayList<ProgramInfo> search(Map<String, String> map) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (map != null) {
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				String key = entry.getKey();
+				if (key.equals("n")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("p")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("s")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("key")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("gtvid")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("gtvidlist")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("genre0")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("genre1")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("ch")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("dt")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("sdate")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("edate")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("rank")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("sort")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				} else if (key.equals("video")) {
+					params.add(new BasicNameValuePair(key, (String) entry
+							.getValue()));
+				}
+			}
+		}
 		SearchResult search = null;
 		ArrayList<ProgramInfo> result = null;
-		String resultJsonString = searchJson(json);
+
+		settings = GaraponSettings.getInstance();
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+
+		String resultJsonString = null;
+		if (settings.getDevId() == null) {
+			// fail
+		} else {
+			// success
+			String url = "http://" + settings.getIpAddress() + ":"
+					+ settings.getPort() + "/gapi/v3" + "/search?dev_id="
+					+ settings.getDevId() + "&gtvsession="
+					+ settings.getGtvSessionId();
+			HttpPost httpPost = new HttpPost(url);
+			if (params != null) {
+				try {
+					httpPost.setEntity(new UrlEncodedFormEntity(params));
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			CloseableHttpResponse response = null;
+			try {
+				response = httpclient.execute(httpPost);
+				ResponseHandler<String> handler = new BasicResponseHandler();
+				String body = handler.handleResponse(response);
+				// returns json
+				resultJsonString = body;
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					response.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
 		getObjectMapper();
+
 		try {
 			search = mapper.readValue(resultJsonString.getBytes(),
 					SearchResult.class);
@@ -77,51 +179,6 @@ public class GaraponImpl implements Garapon {
 
 	public SearchBuilder getSearchBuilder() {
 		return SearchBuilder.newInstance();
-	}
-
-	private String searchJson(String json) {
-		settings = GaraponSettings.getInstance();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-
-		String devId = settings.getDevId();
-		if (devId == null) {
-			// fail
-		} else {
-			// success
-			try {
-				HttpPost httpPost = new HttpPost(getBaseUrl()
-						+ "/search?dev_id=" + settings.getDevId()
-						+ "&gtvsession=" + settings.getGtvSessionId());
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				// params.add(new BasicNameValuePair(
-				// MyConstants.USER_KEY_TERMINAL, settings.getUser()));
-				try {
-					httpPost.setEntity(new UrlEncodedFormEntity(params));
-					CloseableHttpResponse response = httpclient
-							.execute(httpPost);
-					ResponseHandler<String> handler = new BasicResponseHandler();
-					String body = handler.handleResponse(response);
-					// returns json
-
-					return body;
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					// response.close();
-
-				}
-			} catch (Exception e) {
-				// TODO
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -369,7 +426,9 @@ public class GaraponImpl implements Garapon {
 		// XXX 動作確認済
 		/**
 		 * sdateとedateで設定した範囲が「番組開始時間の範囲」なのか「番組終了時間の範囲」なのかを設定します。
-		 * @param dt 番組開始時間の範囲：s、番組終了時間の範囲：e
+		 * 
+		 * @param dt
+		 *            番組開始時間の範囲：s、番組終了時間の範囲：e
 		 * @return
 		 */
 		public SearchBuilder setDt(String dt) {
@@ -422,29 +481,19 @@ public class GaraponImpl implements Garapon {
 				// fail
 			} else {
 				// success
+				String url = "http://" + settings.getIpAddress() + ":"
+						+ settings.getPort() + "/gapi/v3" + "/search?dev_id="
+						+ settings.getDevId() + "&gtvsession="
+						+ settings.getGtvSessionId();
+				HttpPost httpPost = new HttpPost(url);
 				try {
-					String url = "http://" + settings.getIpAddress() + ":"
-							+ settings.getPort() + "/gapi/v3"
-							+ "/search?dev_id=" + settings.getDevId()
-							+ "&gtvsession=" + settings.getGtvSessionId();
-					HttpPost httpPost = new HttpPost(url);
+					httpPost.setEntity(new UrlEncodedFormEntity(params));
+					CloseableHttpResponse response = null;
 					try {
-						for (NameValuePair p : params) {
-							System.out
-									.println(p.getName() + "=" + p.getValue());
-						}
-
-						httpPost.setEntity(new UrlEncodedFormEntity(params));
-						CloseableHttpResponse response = httpclient
-								.execute(httpPost);
+						response = httpclient.execute(httpPost);
 						ResponseHandler<String> handler = new BasicResponseHandler();
 						String body = handler.handleResponse(response);
-						// returns json
-
 						resultJsonString = body;
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					} catch (ClientProtocolException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -452,15 +501,20 @@ public class GaraponImpl implements Garapon {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} finally {
-						// response.close();
-
+						try {
+							response.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
-				} catch (Exception e) {
-					// TODO
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 
-			if (GaraponImpl.getInstance().mapper == null) {
+			if (mapper == null) {
 				mapper = new ObjectMapper();
 			}
 			try {

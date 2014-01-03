@@ -1,6 +1,10 @@
 package me.gizio.garapon4j;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import me.gizio.garapon4j.GaraponImpl.SearchBuilder;
+import me.gizio.garapon4j.json.ProgramInfo;
 
 public interface Garapon {
 
@@ -15,9 +19,14 @@ public interface Garapon {
 
 	public String initializeByPlainPassword(String user, String password,
 			String dev_id);
+	
+	
+	public ArrayList<ProgramInfo> search();
+	
+	public ArrayList<ProgramInfo> search(Map<String, String> map);
 
 	public SearchBuilder getSearchBuilder();
-
+	
 	public String favorite(String gtvid, String rank);
 
 	public String channel();
