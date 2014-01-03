@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import me.gizio.garapon4j.auth.MyAuthImpl;
+import me.gizio.garapon4j.favorite.FavoriteResult;
 import me.gizio.garapon4j.json.ProgramInfo;
 import me.gizio.garapon4j.other.GaraponSettings;
-import me.gizio.garapon4j.other.MyConstants;
 import me.gizio.garapon4j.search.SearchResult;
 
 import org.apache.http.NameValuePair;
@@ -67,64 +67,13 @@ public class GaraponImpl implements Garapon {
 	public ArrayList<ProgramInfo> search(Map<String, String> map) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		if (map != null) {
-			for (Map.Entry<String, String> entry : map.entrySet()) {
-				String key = entry.getKey();
-				if (key.equals("n")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("p")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("s")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("key")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("gtvid")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("gtvidlist")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("genre0")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("genre1")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("ch")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("dt")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("sdate")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("edate")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("rank")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("sort")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				} else if (key.equals("video")) {
-					params.add(new BasicNameValuePair(key, (String) entry
-							.getValue()));
-				}
-			}
+			setParams(map, params);
 		}
 		SearchResult search = null;
 		ArrayList<ProgramInfo> result = null;
-
 		settings = GaraponSettings.getInstance();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-
-		String resultJsonString = null;
-		if (settings.getDevId() == null) {
+		String devId = settings.getDevId();
+		if (devId == null) {
 			// fail
 		} else {
 			// success
@@ -132,49 +81,102 @@ public class GaraponImpl implements Garapon {
 					+ settings.getPort() + "/gapi/v3" + "/search?dev_id="
 					+ settings.getDevId() + "&gtvsession="
 					+ settings.getGtvSessionId();
-			HttpPost httpPost = new HttpPost(url);
-			if (params != null) {
-				try {
-					httpPost.setEntity(new UrlEncodedFormEntity(params));
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			CloseableHttpResponse response = null;
+			String body = post(url, params);
+			getObjectMapper();
 			try {
-				response = httpclient.execute(httpPost);
-				ResponseHandler<String> handler = new BasicResponseHandler();
-				String body = handler.handleResponse(response);
-				// returns json
-				resultJsonString = body;
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				search = mapper.readValue(body.getBytes(), SearchResult.class);
+				result = search.getProgram();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} finally {
-				try {
-					response.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		}
+		return result;
+	}
 
-		getObjectMapper();
-
+	private String post(String url, List<NameValuePair> params) {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(url);
+		if (params != null) {
+			try {
+				httpPost.setEntity(new UrlEncodedFormEntity(params));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		CloseableHttpResponse response = null;
 		try {
-			search = mapper.readValue(resultJsonString.getBytes(),
-					SearchResult.class);
-			result = search.getProgram();
+			response = httpclient.execute(httpPost);
+			ResponseHandler<String> handler = new BasicResponseHandler();
+			return handler.handleResponse(response);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				response.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		return result;
+		return null;
+	}
+
+	private void setParams(Map<String, String> map, List<NameValuePair> params) {
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			String key = entry.getKey();
+			if (key.equals("n")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("p")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("s")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("key")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("gtvid")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("gtvidlist")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("genre0")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("genre1")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("ch")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("dt")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("sdate")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("edate")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("rank")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("sort")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			} else if (key.equals("video")) {
+				params.add(new BasicNameValuePair(key, (String) entry
+						.getValue()));
+			}
+		}
 	}
 
 	public SearchBuilder getSearchBuilder() {
@@ -182,102 +184,49 @@ public class GaraponImpl implements Garapon {
 	}
 
 	@Override
-	public String favorite(String gtvid, String rank) {
+	public boolean favorite(String gtvid, String rank) {
 		settings = GaraponSettings.getInstance();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-
 		String devId = settings.getDevId();
 		if (devId == null) {
 			// fail
 		} else {
 			// success
+			String url = getBaseUrl() + "/favorite?dev_id="
+					+ settings.getDevId() + "&gtvsession="
+					+ settings.getGtvSessionId();
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			String body = post(url, params);
+			getObjectMapper();
 			try {
-				HttpPost httpPost = new HttpPost(getBaseUrl()
-						+ "/favorite?dev_id=" + settings.getDevId()
-						+ "&gtvsession=" + settings.getGtvSessionId());
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair(MyConstants.GTVID_KEY,
-						settings.getUser()));
-				params.add(new BasicNameValuePair("gtvid", gtvid));
-				params.add(new BasicNameValuePair("rank", rank));
-				try {
-					httpPost.setEntity(new UrlEncodedFormEntity(params));
-					CloseableHttpResponse response = httpclient
-							.execute(httpPost);
-					ResponseHandler<String> handler = new BasicResponseHandler();
-					String body = handler.handleResponse(response);
-					// returns json
-
-					return body;
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					// response.close();
-
+				FavoriteResult favorite = null;
+				favorite = mapper.readValue(body.getBytes(),
+						FavoriteResult.class);
+				if (favorite.getStatus().equals("1")) {
+					return true;
 				}
-			} catch (Exception e) {
-				// TODO
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		return null;
+		return false;
 	}
 
 	@Override
 	public String channel() {
 		settings = GaraponSettings.getInstance();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-
 		String devId = settings.getDevId();
 		if (devId == null) {
 			// fail
+			return null;
 		} else {
 			// success
-			try {
-				HttpPost httpPost = new HttpPost(getBaseUrl()
-						+ "/channel?dev_id=" + settings.getDevId()
-						+ "&gtvsession=" + settings.getGtvSessionId());
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair(
-						MyConstants.USER_KEY_TERMINAL, settings.getUser()));
-				params.add(new BasicNameValuePair(
-						MyConstants.MD5PSWD_KEY_TERMINAL, settings
-								.getMD5Password()));
-				params.add(new BasicNameValuePair(MyConstants.AUTHTYPE_KEY,
-						MyConstants.LOGIN_KEY));
-				try {
-					httpPost.setEntity(new UrlEncodedFormEntity(params));
-					CloseableHttpResponse response = httpclient
-							.execute(httpPost);
-					ResponseHandler<String> handler = new BasicResponseHandler();
-					String body = handler.handleResponse(response);
-					// returns json
-
-					return body;
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					// response.close();
-
-				}
-			} catch (Exception e) {
-				// TODO
-			}
+			String url = getBaseUrl() + "/channel?dev_id="
+					+ settings.getDevId() + "&gtvsession="
+					+ settings.getGtvSessionId();
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			return post(url, params);
 		}
-		return null;
 	}
 
 	String getMD5Text(String text) {
