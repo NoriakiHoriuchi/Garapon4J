@@ -16,7 +16,7 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
   1. 簡単な認証。めんどうなWeb認証と端末認証をシームレスに実現。
   1. ガラポンTV APIにほぼ完全対応。
 
-## version 0.0.2 最初のリリース
+## version 0.1.2 最初のリリース
 [ダウンロードはこちら](https://github.com/NoriakiHoriuchi/Garapon4J/releases)
 
 ## できること
