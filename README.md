@@ -33,7 +33,6 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
 
 ## TODO
 1. 1月13日までに実装予定
-  * SearchBuilder#setGenre0, setGenre1：ProgramInfoでparseに失敗する。
   * 簡単なテスト
 1. やりたい
   * お気に入り追加結果を生Jsonから `boolean` または独自オブジェクトに変更
