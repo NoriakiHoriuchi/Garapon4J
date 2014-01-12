@@ -1,23 +1,13 @@
-# passwords
-conf/garapon.conf
-
 # Directories #
-/build/
-/bin/
-target/
-lib/src/
-
-#in the project
 project/build/
 project/bin/
 project/target/
 project/lib/src/
-
-#in the sample
 sample/build/
 sample/bin/
 sample/target/
 sample/lib/src/
+
  
 # OS Files #
 .DS_Store

@@ -99,7 +99,7 @@ public class GaraponImpl implements Garapon {
 		HttpPost httpPost = new HttpPost(url);
 		if (params != null) {
 			try {
-				httpPost.setEntity(new UrlEncodedFormEntity(params));
+				httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

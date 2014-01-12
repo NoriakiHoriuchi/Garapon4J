@@ -3,21 +3,19 @@ package me.gizio.garapon4j.client;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
-import me.gizio.garapon4j.GaraponImpl;
+import me.gizio.garapon4j.Garapon;
 import me.gizio.garapon4j.json.ProgramInfo;
 import me.gizio.garapon4j.other.GaraponSettings;
 
 public class SampleClient {
-	static GaraponImpl garapon;
+	static Garapon garapon;
 	static GaraponSettings settings;
 
 	public static void main(String[] args) {
 		System.out.println("============ before ============");
-		garapon = GaraponImpl.getInstance();
+		garapon = Garapon.getInstance();
 		settings = GaraponSettings.getInstance();
 		print();
 		System.out.println("============ before ============");
@@ -39,44 +37,25 @@ public class SampleClient {
 		System.out.println("============ initialize ============");
 		System.out.println("============ search ============");
 		print();
-		Map<String, String> param=new HashMap<String, String>();
-		param.put("key", "Kニ");
-		ArrayList<ProgramInfo> list = garapon.search(param);
+		ArrayList<ProgramInfo> list = garapon.search(null);
 		System.out.println(list.size());
-		for (ProgramInfo k:list){
-			System.out.println(k.getTitle());
-		}
+		System.out.println(list.toString());
 		System.out.println("============ search ============");
-		System.out
-				.println("============ search NHK Kohaku Utagassen ============");
-		print();
-		ArrayList<ProgramInfo> kohaku = garapon.getSearchBuilder().setDt("s")
-				.setS("e").setKey("紅").execute();
-		System.out.println(kohaku.size());
-		for (ProgramInfo k : kohaku) {
-			System.out.println(k.getTitle());
-			// System.out.println(k.getRtmpUrl());
-		}
-		System.out
-				.println("============ search NHK Kohaku Utagassen ============");
 		System.out.println("============ searchbuilder ============");
 		print();
-
 		ArrayList<ProgramInfo> list2 = garapon.getSearchBuilder().setN("1")
 				.execute();
 		System.out.println(list2.size());
-		for (ProgramInfo k : list2) {
-			System.out.println(k.getTitle());
-		}
+		System.out.println(list2.toString());
 		System.out.println("============ searchbuilder ============");
 		System.out.println("============ favorite ============");
 		print();
-		boolean result2 = garapon.favorite(list2.get(0).getGtvid(), "-1");
-		System.out.println(result2);
+		String result = garapon.favorite(list2.get(0).getGtvid(), "-1");
+		System.out.println(result);
 		System.out.println("============ favorite ============");
 		System.out.println("============ channel ============");
 		print();
-		String result = garapon.channel();
+		result = garapon.channel();
 		System.out.println(result);
 		System.out.println("============ channel ============");
 	}
