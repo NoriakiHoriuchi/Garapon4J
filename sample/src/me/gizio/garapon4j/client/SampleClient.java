@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import me.gizio.garapon4j.GaraponImpl;
-import me.gizio.garapon4j.json.ProgramInfo;
+import me.gizio.garapon4j.json.Program;
 import me.gizio.garapon4j.other.GaraponSettings;
 
 public class SampleClient {
@@ -41,19 +41,20 @@ public class SampleClient {
 		print();
 		Map<String, String> param=new HashMap<String, String>();
 		param.put("key", "Kニ");
-		ArrayList<ProgramInfo> list = garapon.search(param);
+		param.put("genre0", "0");
+		ArrayList<Program> list = garapon.search(param);
 		System.out.println(list.size());
-		for (ProgramInfo k:list){
+		for (Program k:list){
 			System.out.println(k.getTitle());
 		}
 		System.out.println("============ search ============");
 		System.out
 				.println("============ search NHK Kohaku Utagassen ============");
 		print();
-		ArrayList<ProgramInfo> kohaku = garapon.getSearchBuilder().setDt("s")
+		ArrayList<Program> kohaku = garapon.getSearchBuilder().setDt("s")
 				.setS("e").setKey("紅").execute();
 		System.out.println(kohaku.size());
-		for (ProgramInfo k : kohaku) {
+		for (Program k : kohaku) {
 			System.out.println(k.getTitle());
 			// System.out.println(k.getRtmpUrl());
 		}
@@ -62,10 +63,10 @@ public class SampleClient {
 		System.out.println("============ searchbuilder ============");
 		print();
 
-		ArrayList<ProgramInfo> list2 = garapon.getSearchBuilder().setN("1")
+		ArrayList<Program> list2 = garapon.getSearchBuilder().setN("1")
 				.execute();
 		System.out.println(list2.size());
-		for (ProgramInfo k : list2) {
+		for (Program k : list2) {
 			System.out.println(k.getTitle());
 		}
 		System.out.println("============ searchbuilder ============");

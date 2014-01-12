@@ -8,7 +8,9 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.format.DateTimeFormat;
 
-public class ProgramInfo {
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+
+public class Program {
 	private String gtvid;
 	private DateTime startdate;
 	private Duration duration;
@@ -16,23 +18,25 @@ public class ProgramInfo {
 	private String title;
 	private String description;
 	private int favorite;
+	private String genre1;
+	private String genre2;
 	private ArrayList<String> genre;
 	private String bc;
 	private String bc_tags;
 	private int ts;
 	private int caption_hit;
-	private CaptionInfo caption;
+	private Caption caption;
 
 	private GaraponSettings settings;
 
-	public ProgramInfo() {
+	public Program() {
 
 	}
 
-	public ProgramInfo(String gtvid, DateTime startdate, Duration duration,
+	public Program(String gtvid, DateTime startdate, Duration duration,
 			int ch, String title, String description, int favorite,
 			ArrayList<String> genre, String bc, String bc_tags, int ts,
-			int caption_hit, CaptionInfo caption) {
+			int caption_hit, Caption caption) {
 		super();
 		this.gtvid = gtvid;
 		this.startdate = startdate;
@@ -77,6 +81,14 @@ public class ProgramInfo {
 		return favorite;
 	}
 
+	public String getGenre1() {
+		return genre1;
+	}
+
+	public String getGenre2() {
+		return genre2;
+	}
+
 	public ArrayList<String> getGenre() {
 		return genre;
 	}
@@ -97,7 +109,7 @@ public class ProgramInfo {
 		return caption_hit;
 	}
 
-	public CaptionInfo getCaption() {
+	public Caption getCaption() {
 		return caption;
 	}
 
@@ -136,6 +148,14 @@ public class ProgramInfo {
 		this.favorite = favorite;
 	}
 
+	public void setGenre1(String genre1) {
+		this.genre1 = genre1;
+	}
+
+	public void setGenre2(String genre2) {
+		this.genre2 = genre2;
+	}
+
 	public void setGenre(ArrayList<String> genre) {
 		this.genre = genre;
 	}
@@ -156,7 +176,7 @@ public class ProgramInfo {
 		this.caption_hit = caption_hit;
 	}
 
-	public void setCaption(CaptionInfo caption) {
+	public void setCaption(Caption caption) {
 		this.caption = caption;
 	}
 
@@ -187,4 +207,9 @@ public class ProgramInfo {
 	private String getGaraponUrl() {
 		return "http://" + settings.getIpAddress() + ":" + settings.getPort();
 	}
+	
+	@JsonAnySetter
+	  public void handleUnknown(String key, Object value) {
+	    // do something: put to a Map; log a warning, whatever
+	  }
 }

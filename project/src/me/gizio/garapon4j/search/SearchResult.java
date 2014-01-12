@@ -2,19 +2,19 @@ package me.gizio.garapon4j.search;
 
 import java.util.ArrayList;
 
-import me.gizio.garapon4j.json.ProgramInfo;
+import me.gizio.garapon4j.json.Program;
 
 public class SearchResult {
 	private String status;
 	private int hit;
 	private String version;
-	private ArrayList<ProgramInfo> program;
+	private ArrayList<Program> program;
 
 	public SearchResult() {
 	}
 
 	public SearchResult(String status, int hit, String version,
-			ArrayList<ProgramInfo> program) {
+			ArrayList<Program> program) {
 		super();
 		this.status = status;
 		this.hit = hit;
@@ -34,7 +34,7 @@ public class SearchResult {
 		return version;
 	}
 
-	public ArrayList<ProgramInfo> getProgram() {
+	public ArrayList<Program> getProgram() {
 		return program;
 	}
 
@@ -50,7 +50,7 @@ public class SearchResult {
 		this.version = version;
 	}
 
-	public void setPrograms(ArrayList<ProgramInfo> program) {
+	public void setPrograms(ArrayList<Program> program) {
 		this.program = program;
 	}
 

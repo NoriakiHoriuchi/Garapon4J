@@ -11,7 +11,7 @@ import java.util.Map;
 
 import me.gizio.garapon4j.auth.MyAuthImpl;
 import me.gizio.garapon4j.favorite.FavoriteResult;
-import me.gizio.garapon4j.json.ProgramInfo;
+import me.gizio.garapon4j.json.Program;
 import me.gizio.garapon4j.other.GaraponSettings;
 import me.gizio.garapon4j.search.SearchResult;
 
@@ -60,17 +60,17 @@ public class GaraponImpl implements Garapon {
 		return null;
 	}
 
-	public ArrayList<ProgramInfo> search() {
+	public ArrayList<Program> search() {
 		return search(null);
 	}
 
-	public ArrayList<ProgramInfo> search(Map<String, String> map) {
+	public ArrayList<Program> search(Map<String, String> map) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		if (map != null) {
 			setParams(map, params);
 		}
 		SearchResult search = null;
-		ArrayList<ProgramInfo> result = null;
+		ArrayList<Program> result = null;
 		settings = GaraponSettings.getInstance();
 		String devId = settings.getDevId();
 		if (devId == null) {
@@ -84,6 +84,7 @@ public class GaraponImpl implements Garapon {
 			String body = post(url, params);
 			getObjectMapper();
 			try {
+				System.out.println(body);
 				search = mapper.readValue(body.getBytes(), SearchResult.class);
 				result = search.getProgram();
 			} catch (IOException e) {
@@ -416,9 +417,9 @@ public class GaraponImpl implements Garapon {
 			return this;
 		}
 
-		public ArrayList<ProgramInfo> execute() {
+		public ArrayList<Program> execute() {
 			SearchResult search = new SearchResult();
-			ArrayList<ProgramInfo> result = new ArrayList<ProgramInfo>();
+			ArrayList<Program> result = new ArrayList<Program>();
 
 			GaraponSettings settings = GaraponSettings.getInstance();
 			String devId = settings.getDevId();

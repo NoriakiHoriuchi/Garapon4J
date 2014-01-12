@@ -1,14 +1,14 @@
 package me.gizio.garapon4j.json;
 
-public class CaptionInfo {
+public class Caption {
 	private String captionText;
 	private String captionTime;
 
-	public CaptionInfo(){
+	public Caption(){
 		
 	}
 	
-	public CaptionInfo(String captionText, String captionTime) {
+	public Caption(String captionText, String captionTime) {
 		this.captionText = captionText;
 		this.captionTime = captionTime;
 	}
