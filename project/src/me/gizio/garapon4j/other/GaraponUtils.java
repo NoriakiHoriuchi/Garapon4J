@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class MyUtils {
+public class GaraponUtils {
 
 	public static String getProperties(String key) {
 		String configFile = "conf/garapon.conf";

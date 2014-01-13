@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import me.gizio.garapon4j.auth.MyAuthImpl;
+import me.gizio.garapon4j.auth.GaraponAuthImpl;
 import me.gizio.garapon4j.favorite.FavoriteResult;
 import me.gizio.garapon4j.json.Program;
 import me.gizio.garapon4j.other.GaraponConnection;
@@ -47,7 +47,7 @@ public class GaraponImpl implements Garapon {
 		settings.setUser(user);
 		settings.setMD5Password(md5Password);
 		settings.setDevId(devId);
-		MyAuthImpl auth = MyAuthImpl.getInstance();
+		GaraponAuthImpl auth = GaraponAuthImpl.getInstance();
 		auth.execute();
 		return null;
 	}

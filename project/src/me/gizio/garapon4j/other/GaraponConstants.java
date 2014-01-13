@@ -1,6 +1,6 @@
 package me.gizio.garapon4j.other;
 
-public class MyConstants {
+public class GaraponConstants {
 
 	public static String USER_KEY_WEB = "user";
 	public static String USER_KEY_TERMINAL = "loginid";

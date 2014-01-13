@@ -11,21 +11,21 @@ import me.gizio.garapon4j.exception.UnknownUserException;
 import me.gizio.garapon4j.exception.WrongPasswordException;
 import me.gizio.garapon4j.other.GaraponConnection;
 import me.gizio.garapon4j.other.GaraponSettings;
-import me.gizio.garapon4j.other.MyConstants;
+import me.gizio.garapon4j.other.GaraponConstants;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-public class MyAuthImpl implements MyAuth {
+public class GaraponAuthImpl implements GaraponAuth {
 
 	GaraponSettings settings;
 
-	private static MyAuthImpl instance = new MyAuthImpl();
+	private static GaraponAuthImpl instance = new GaraponAuthImpl();
 
-	private MyAuthImpl() {
+	private GaraponAuthImpl() {
 	}
 
-	public static MyAuthImpl getInstance() {
+	public static GaraponAuthImpl getInstance() {
 		return instance;
 	}
 
@@ -55,11 +55,11 @@ public class MyAuthImpl implements MyAuth {
 		} else {
 			String url = "http://garagw.garapon.info/getgtvaddress";
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair(MyConstants.USER_KEY_WEB,
+			params.add(new BasicNameValuePair(GaraponConstants.USER_KEY_WEB,
 					settings.getUser()));
-			params.add(new BasicNameValuePair(MyConstants.MD5PSWD_KEY_WEB,
+			params.add(new BasicNameValuePair(GaraponConstants.MD5PSWD_KEY_WEB,
 					settings.getMD5Password()));
-			params.add(new BasicNameValuePair(MyConstants.DEV_ID_KEY, settings
+			params.add(new BasicNameValuePair(GaraponConstants.DEV_ID_KEY, settings
 					.getDevId()));
 
 			String body = GaraponConnection.post(url, params);
@@ -91,12 +91,12 @@ public class MyAuthImpl implements MyAuth {
 					+ settings.getPort() + "/gapi/v3/auth?dev_id="
 					+ settings.getDevId();
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair(MyConstants.USER_KEY_TERMINAL,
+			params.add(new BasicNameValuePair(GaraponConstants.USER_KEY_TERMINAL,
 					settings.getUser()));
-			params.add(new BasicNameValuePair(MyConstants.MD5PSWD_KEY_TERMINAL,
+			params.add(new BasicNameValuePair(GaraponConstants.MD5PSWD_KEY_TERMINAL,
 					settings.getMD5Password()));
-			params.add(new BasicNameValuePair(MyConstants.AUTHTYPE_KEY,
-					MyConstants.LOGIN_KEY));
+			params.add(new BasicNameValuePair(GaraponConstants.AUTHTYPE_KEY,
+					GaraponConstants.LOGIN_KEY));
 
 			String body = GaraponConnection.post(url, params);
 			if (body.startsWith("1")) {
