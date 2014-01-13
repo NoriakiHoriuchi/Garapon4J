@@ -1,5 +1,7 @@
 package me.gizio.garapon4j.json;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+
 public class LoginInfo {
 	private int status;
 	private int login;
@@ -47,4 +49,9 @@ public class LoginInfo {
 	public void setVersion(String version) {
 		this.version = version;
 	}
+
+	@JsonAnySetter
+	  public void handleUnknown(String key, Object value) {
+	    // do something: put to a Map; log a warning, whatever
+	  }
 }

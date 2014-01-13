@@ -25,7 +25,7 @@ public class Program {
 	private String bc_tags;
 	private int ts;
 	private int caption_hit;
-	private Caption caption;
+	private ArrayList<Caption> caption;
 
 	private GaraponSettings settings;
 
@@ -36,7 +36,7 @@ public class Program {
 	public Program(String gtvid, DateTime startdate, Duration duration,
 			int ch, String title, String description, int favorite,
 			ArrayList<String> genre, String bc, String bc_tags, int ts,
-			int caption_hit, Caption caption) {
+			int caption_hit, ArrayList<Caption> caption) {
 		super();
 		this.gtvid = gtvid;
 		this.startdate = startdate;
@@ -109,7 +109,7 @@ public class Program {
 		return caption_hit;
 	}
 
-	public Caption getCaption() {
+	public ArrayList<Caption> getCaption() {
 		return caption;
 	}
 
@@ -176,7 +176,7 @@ public class Program {
 		this.caption_hit = caption_hit;
 	}
 
-	public void setCaption(Caption caption) {
+	public void setCaption(ArrayList<Caption> caption) {
 		this.caption = caption;
 	}
 

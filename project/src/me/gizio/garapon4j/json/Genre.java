@@ -1,5 +1,7 @@
 package me.gizio.garapon4j.json;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+
 public class Genre {
 	private String genre;
 	private String genre0;
@@ -41,4 +43,9 @@ public class Genre {
 	public String getGenre1() {
 		return genre1;
 	}
+
+	@JsonAnySetter
+	  public void handleUnknown(String key, Object value) {
+	    // do something: put to a Map; log a warning, whatever
+	  }
 }

@@ -21,65 +21,57 @@ public class SampleClient {
 		settings = GaraponSettings.getInstance();
 		print();
 		System.out.println("============ before ============");
-
 		System.out.println("============ initialize ============");
-		Properties prop = new Properties();
-		String configFile = "conf/garapon.conf";
-		try {
-			prop.load(new FileInputStream(configFile));
-			String user = prop.getProperty("user");
-			String password = prop.getProperty("md5password");
-			String devid = prop.getProperty("devid");
-			garapon.initialize(user, password, devid);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+//		Properties prop = new Properties();
+//		String configFile = "conf/garapon.conf";
+//		try {
+//			prop.load(new FileInputStream(configFile));
+//			String user = prop.getProperty("user");
+//			String password = prop.getProperty("md5password");
+//			String devid = prop.getProperty("devid");
+//			garapon.initialize(user, password, devid);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return;
+//		}
+			String user ="daisuki";
+			String password ="tvhackers";
+			String devid = "e011e18977388242088e4d12ee998e6f";
+			garapon.initializeByPlainPassword(user, password, devid);
 		print();
 		System.out.println("============ initialize ============");
 		System.out.println("============ search ============");
 		print();
 		Map<String, String> param=new HashMap<String, String>();
-		param.put("key", "Kニ");
-		param.put("genre0", "0");
+		param.put("key", "ダレノガレ");
+		param.put("s", "c");
 		ArrayList<Program> list = garapon.search(param);
 		System.out.println(list.size());
 		for (Program k:list){
 			System.out.println(k.getTitle());
+			System.out.println(k.getDescription());
 		}
 		System.out.println("============ search ============");
-		System.out
-				.println("============ search NHK Kohaku Utagassen ============");
-		print();
-		ArrayList<Program> kohaku = garapon.getSearchBuilder().setDt("s")
-				.setS("e").setKey("紅").execute();
-		System.out.println(kohaku.size());
-		for (Program k : kohaku) {
-			System.out.println(k.getTitle());
-			// System.out.println(k.getRtmpUrl());
-		}
-		System.out
-				.println("============ search NHK Kohaku Utagassen ============");
-		System.out.println("============ searchbuilder ============");
-		print();
-
-		ArrayList<Program> list2 = garapon.getSearchBuilder().setN("1")
-				.execute();
-		System.out.println(list2.size());
-		for (Program k : list2) {
-			System.out.println(k.getTitle());
-		}
-		System.out.println("============ searchbuilder ============");
-		System.out.println("============ favorite ============");
-		print();
-		boolean result2 = garapon.favorite(list2.get(0).getGtvid(), "-1");
-		System.out.println(result2);
-		System.out.println("============ favorite ============");
-		System.out.println("============ channel ============");
-		print();
-		String result = garapon.channel();
-		System.out.println(result);
-		System.out.println("============ channel ============");
+//		System.out.println("============ searchbuilder ============");
+//		print();
+//
+//		ArrayList<Program> list2 = garapon.getSearchBuilder().setN("1")
+//				.execute();
+//		System.out.println(list2.size());
+//		for (Program k : list2) {
+//			System.out.println(k.getTitle());
+//		}
+//		System.out.println("============ searchbuilder ============");
+//		System.out.println("============ favorite ============");
+//		print();
+//		boolean result2 = garapon.favorite(list2.get(0).getGtvid(), "-1");
+//		System.out.println(result2);
+//		System.out.println("============ favorite ============");
+//		System.out.println("============ channel ============");
+//		print();
+//		String result = garapon.channel();
+//		System.out.println(result);
+//		System.out.println("============ channel ============");
 	}
 
 	private static void print() {
