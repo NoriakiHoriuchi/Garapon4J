@@ -18,7 +18,8 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
   * Jackson 2.2.3
 
 
-## version 0.1.2 最初のリリース
+## version 0.1.3
+第1回ガラポンTVハッカソンから重要なフィードバックを得ました。
 [ダウンロードはこちら](https://github.com/NoriakiHoriuchi/Garapon4J/releases)
 
 ## できること
@@ -34,8 +35,28 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
 1. 録画チャンネルの取得
 
 ## TODO
+1. やりたい
+    * 簡単なテスト
+    * お気に入り追加結果を生Jsonから `boolean` または独自オブジェクトに変更 ←Done!
+    * [宇野さんのRuby版ライブラリ](https://github.com/unok/GaraponTVAPI4Ruby)の[searchメソッド](https://github.com/unok/GaraponTVAPI4Ruby/blob/master/GaraponTVAPI4Ruby/search.rb)を参考にしたい
+1. ディレクトリの整理 ←Done!
+1. post周りのリファクタリング ←Done!
 1. 余裕あれば
+  * ジャンルをオブジェクト化
   * 録画チャンネル取得結果を生Jsonから 独自オブジェクトに変更
   
 ## 関連リンク
 * http://garapon.tv/developer
+
+## 中身について
+projectフォルダ内がGarapon4J本体のプロジェクトです。これをインポートしてください。
+
+## サンプルの使い方
+Sampleフォルダ内をプロジェクトとしてインポートしてください。
+confフォルダを作成し、その中に garapon.conf ファイルを作成してください。 ファイルには以下の様に設定してください。
+
+```
+    user=username
+    md5password=ao2ertjaio4wfjaosd6gjqpweor6iuq234958u03jownf132oi45ualqw35uq9
+    devid=upq3498npvw3ctuqad35omqipx85xq039px58yq398tycabq26937x430234x23jh42
+```
