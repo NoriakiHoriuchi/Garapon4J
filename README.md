@@ -39,6 +39,8 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
     * 簡単なテスト
     * お気に入り追加結果を生Jsonから `boolean` または独自オブジェクトに変更 ←Done!
     * [宇野さんのRuby版ライブラリ](https://github.com/unok/GaraponTVAPI4Ruby)の[searchメソッド](https://github.com/unok/GaraponTVAPI4Ruby/blob/master/GaraponTVAPI4Ruby/search.rb)を参考にしたい
+    * 依存性の削減
+        *HttpComponents4はAndroidでは使えないらしいので、3にダウングレードするか、そもそも使わないか、いずれか。
 1. ディレクトリの整理 ←Done!
 1. post周りのリファクタリング ←Done!
 1. 余裕あれば
