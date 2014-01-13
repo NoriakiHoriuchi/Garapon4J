@@ -1,7 +1,6 @@
 package me.gizio.garapon4j;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,18 +11,11 @@ import java.util.Map;
 import me.gizio.garapon4j.auth.MyAuthImpl;
 import me.gizio.garapon4j.favorite.FavoriteResult;
 import me.gizio.garapon4j.json.Program;
+import me.gizio.garapon4j.other.GaraponConnection;
 import me.gizio.garapon4j.other.GaraponSettings;
 import me.gizio.garapon4j.search.SearchResult;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.joda.time.DateTime;
 
@@ -81,7 +73,7 @@ public class GaraponImpl implements Garapon {
 					+ settings.getPort() + "/gapi/v3" + "/search?dev_id="
 					+ settings.getDevId() + "&gtvsession="
 					+ settings.getGtvSessionId();
-			String body = post(url, params);
+			String body = GaraponConnection.post(url, params);
 			getObjectMapper();
 			try {
 				System.out.println(body);
@@ -95,38 +87,6 @@ public class GaraponImpl implements Garapon {
 		return result;
 	}
 
-	private static String post(String url, List<NameValuePair> params) {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(url);
-		if (params != null) {
-			try {
-				httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		CloseableHttpResponse response = null;
-		try {
-			response = httpclient.execute(httpPost);
-			ResponseHandler<String> handler = new BasicResponseHandler();
-			return handler.handleResponse(response);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				response.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
 
 	private void setParams(Map<String, String> map, List<NameValuePair> params) {
 		for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -196,7 +156,7 @@ public class GaraponImpl implements Garapon {
 					+ settings.getDevId() + "&gtvsession="
 					+ settings.getGtvSessionId();
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			String body = post(url, params);
+			String body = GaraponConnection.post(url, params);
 			getObjectMapper();
 			try {
 				FavoriteResult favorite = null;
@@ -226,7 +186,7 @@ public class GaraponImpl implements Garapon {
 					+ settings.getDevId() + "&gtvsession="
 					+ settings.getGtvSessionId();
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			return post(url, params);
+			return GaraponConnection.post(url, params);
 		}
 	}
 
@@ -431,7 +391,7 @@ public class GaraponImpl implements Garapon {
 						+ settings.getPort() + "/gapi/v3" + "/search?dev_id="
 						+ settings.getDevId() + "&gtvsession="
 						+ settings.getGtvSessionId();
-				String body = post(url, params);
+				String body = GaraponConnection.post(url, params);
 				getObjectMapper();
 				try {
 					search = mapper.readValue(body.getBytes(),
