@@ -8,13 +8,15 @@ Garapon4Jは、だれでも簡単にJavaアプリケーションからGaraponTVに接続し、番組の情報
 ## 特徴
   1. Java界唯一のガラポンTV APIラッパ。
   1. 純粋Java。JDK6にて動作確認済。
-  1. 低依存性。有名なライブラリしか使っていません。
-    * Joda-Time
-    * HTTP Components HttpCore
-    * HTTP Components HttpClient
-    * Jackson
   1. 簡単な認証。めんどうなWeb認証と端末認証をシームレスに実現。
   1. ガラポンTV APIにほぼ完全対応。
+
+## 依存性
+  * Joda-Time 2.3
+  * HTTP Components HttpCore 4.3
+  * HTTP Components HttpClient 4.3.1
+  * Jackson 2.2.3
+
 
 ## version 0.1.2 最初のリリース
 [ダウンロードはこちら](https://github.com/NoriakiHoriuchi/Garapon4J/releases)
